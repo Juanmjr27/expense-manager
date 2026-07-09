@@ -313,14 +313,28 @@ function renderExpenses(expenses) {
 
 	for (const expense of expenses) {
 		const tableRow = document.createElement("tr");
-		tableRow.innerHTML = `
-			<td>${formatDate(expense.date)}</td>
-			<td class="fw-semibold">${formatAmount(expense.amount)}</td>
-			<td>${escapeHtml(expense.category)}</td>
-			<td>${escapeHtml(expense.description || "Sin descripcion")}</td>
-		`;
+tableRow.innerHTML = `
+    <td>${formatDate(expense.date)}</td>
+    <td class="fw-semibold">${formatAmount(expense.amount)}</td>
+    <td>${escapeHtml(expense.category)}</td>
+    <td>${escapeHtml(expense.description || "Sin descripcion")}</td>
+    <td class="text-end" style="width: 50px;">
+        <button class="btn btn-sm btn-outline-danger delete-btn" data-id="${expense.id}">
+            Eliminar gasto
+        </button>
+    </td>
+`;
 		expensesTableBody.appendChild(tableRow);
 
+		// Añadir evento de borrar
+const deleteBtn = tableRow.querySelector('.delete-btn');
+if (deleteBtn) {
+    deleteBtn.addEventListener('click', () => {
+        if (confirm('¿Estás seguro de que quieres borrar este gasto?')) {
+            deleteExpense(expense.id);
+        }
+    });
+}
 		const card = document.createElement("article");
 		card.className = "expense-card p-3 shadow-sm";
 		card.innerHTML = `
@@ -583,4 +597,21 @@ function escapeHtml(value) {
 		.replaceAll(">", "&gt;")
 		.replaceAll('"', "&quot;")
 		.replaceAll("'", "&#39;");
+}
+
+async function deleteExpense(id) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/expenses/${id}`, {
+            method: "DELETE"
+        });
+
+        if (response.ok) {
+            showExpensesFeedback("Gasto eliminado correctamente.", "success");
+            loadExpenses(); // recargar la lista
+        } else {
+            showExpensesFeedback("Error al eliminar el gasto.", "danger");
+        }
+    } catch (error) {
+        showExpensesFeedback("Error de conexión.", "danger");
+    }
 }
