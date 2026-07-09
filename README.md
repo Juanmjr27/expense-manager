@@ -28,11 +28,6 @@ Aplicación **full-stack** para gestionar gastos personales, desarrollada siguie
 - Búsqueda parcial en descripciones
 - Persistencia en base de datos SQLite
 
-## Capturas
-
-![Dashboard](https://github.com/Juanmjr27/expense-manager/blob/main/screenshots/dashboard.png)
-![Listado](https://github.com/Juanmjr27/expense-manager/blob/main/screenshots/listado.png)
-
 ## Cómo ejecutar
 
 1. Clona el repositorio
